@@ -35,10 +35,20 @@ elif [ $num -eq '1' ];then
       echo 'unzip未安装，无法解压安装文件，请先安装unzip'
     else
       echo "正在下载arthas......"
-      sudo wget --no-check-certificate http://fengfu.io/attach/arthas-packaging-3.0.4-bin.zip >> /dev/null 2>&1
+      sudo wget  http://3.106.11.105:8083/tool/download/arthas-3.1.4-bin.zip >> /dev/null 2>&1
       sudo mkdir arthas
-      sudo unzip arthas-packaging-3.0.4-bin.zip -d arthas >> /dev/null 2>&1
-      sudo rm -f arthas-packaging-3.0.4-bin.zip >> /dev/null 2>&1
+      sudo unzip arthas-3.1.4-bin.zip -d arthas >> /dev/null 2>&1
+      sudo rm -f arthas-3.1.4-bin.zip >> /dev/null 2>&1
+      sudo wget  http://3.106.11.105:8083/tool/download/jvm/tools.jar
+      sudo wget  http://3.106.11.105:8083/tool/download/jvm/jmap
+      sudo wget  http://3.106.11.105:8083/tool/download/jvm/jstack
+      JAVA=/usr/local/iGET/SRE/jre
+      cp tools.jar ${JAVA}/lib
+	  cp jmap ${JAVA}/bin
+	  cp jstack ${JAVA}/bin
+	  chmod 777 ${JAVA}/lib/tools.jar
+	  chmod 777 ${JAVA}/bin/jmap
+	  chmod 777 ${JAVA}/bin/jstack
 
       read -p "请输入Java进程的所属用户:" user
 
@@ -46,13 +56,11 @@ elif [ $num -eq '1' ];then
       group=`id -gn $user`
 
       #修改属主
-      sudo chown $group.$user -R arthas >> /dev/null 2>&1
+      sudo chown $user:$group -R arthas >> /dev/null 2>&1
     fi
   fi
-  cd arthas
-  sudo -u $group.$user ./install-local.sh
-
-  sudo -u $group.$user ./as.sh
-
-  source ./sub_menu.sh
+  #cd arthas
+   current_pid=`ps aux |grep "java"|grep "$process_keyword"|grep -v "grep"|awk '{ print $2}'`
+  sudo -u $user -EH java -jar arthas/arthas-boot.jar ${current_pid}
+  #source ./sub_menu.sh
 fi

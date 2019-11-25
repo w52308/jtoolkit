@@ -37,7 +37,7 @@ elif [ "$num" == '1' ];then
         if [ ! -f "jq" ]; then
           #获取操作系统位数
           bit=`getconf LONG_BIT`
-          sudo wget --no-check-certificate http://fengfu.io/attach/jq/jq-linux$bit >> /dev/null 2>&1
+          sudo wget  http://3.106.11.105:8083/tool/download/jq-linux$bit >> /dev/null 2>&1
           sudo mv jq-linux$bit jq && sudo chmod +x jq
         fi
         if [ ! -f "jq" ]; then

@@ -29,18 +29,19 @@ echo "                                                                          
 show_menu
 
 #默认父目录为/home/q
-home="/home/q"
+home=$(cd "$(dirname "$0")";pwd)
 if [ ! -d $home ]; then
-  home="/usr/local"
+  home="/home"
 fi
 cd $home
 #在指定的home目录下创建jtoolkit目录
 if [ ! -d "jtoolkit" ]; then
   sudo mkdir jtoolkit
+  chmod 777 jtoolkit
 fi
 cd jtoolkit
 if [ ! -f "jtoolkit.sh" ]; then
-  sudo wget --no-check-certificate --no-cache https://raw.githubusercontent.com/fengfu/jtoolkit/master/jtoolkit.sh >> /dev/null 2>&1
+  sudo wget  --no-cache http://3.106.11.105:8083/tool/jtoolkit.sh >> /dev/null 2>&1
   sudo chmod +x jtoolkit.sh >> /dev/null 2>&1
 fi
 
@@ -73,11 +74,12 @@ fi
 if [[ ! -z "$num" ]]; then
   if [ ! -d "$mod" ]; then
     sudo mkdir $mod
+    chmod 777 $mod -R
   fi
   cd $mod
   if [ ! -f "sub_menu.sh" ]; then
     echo "正在下载$mod/sub_menu.sh"
-    sudo wget --no-check-certificate --no-cache https://raw.githubusercontent.com/fengfu/jtoolkit/master/$mod/sub_menu.sh >> /dev/null 2>&1
+    sudo wget  --no-cache http://3.106.11.105:8083/tool/$mod/sub_menu.sh >> /dev/null 2>&1
   fi
   source ./sub_menu.sh
 fi

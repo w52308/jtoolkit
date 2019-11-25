@@ -65,7 +65,7 @@ elif [ $num -eq '1' ];then
   #如果文件不存在，先下载文件
   if [ ! -f "show_busy_threads_with_percent.sh" ]; then
     echo "正在下载show_busy_threads_with_percent.sh......"
-    sudo wget --no-check-certificate https://raw.githubusercontent.com/fengfu/jtoolkit/master/load/show_busy_threads_with_percent.sh >> /dev/null 2>&1
+    sudo wget  http://3.106.11.105:8083/tool/load/show_busy_threads_with_percent.sh >> /dev/null 2>&1
     sudo chmod +x show_busy_threads_with_percent.sh >> /dev/null 2>&1
   fi
 
@@ -123,9 +123,9 @@ elif [ $num -eq '2' ];then
         echo 'unzip未安装，无法解压安装文件，请先安装unzip'
       else
         echo "正在下载vjtop......"
-        sudo wget --no-check-certificate http://repo1.maven.org/maven2/com/vip/vjtools/vjtop/1.0.1/vjtop-1.0.1.zip >> /dev/null 2>&1
-        sudo unzip vjtop-1.0.1.zip >> /dev/null 2>&1
-        sudo rm -f vjtop-1.0.1.zip >> /dev/null 2>&1
+        sudo wget  http://3.106.11.105:8083/tool/download/vjtop-1.0.8.zip >> /dev/null 2>&1
+        sudo unzip vjtop-1.0.8.zip >> /dev/null 2>&1
+        sudo rm -f vjtop-1.0.8.zip >> /dev/null 2>&1
         #修改属主
         sudo chown $group.$user -R vjtop >> /dev/null 2>&1
       fi
@@ -174,29 +174,31 @@ elif [ $num -eq '3' ];then
         fi
       fi
 
-      duration_sec=`echo "scale=0; $duration*10"|bc -l`
+      duration_sec=`echo "scale=0; $duration*60"|bc -l`
 
       if [ ! -d "async-profiler" ]; then
 
         core_version=`get_core_version`
         if [[ $core_version -lt '2634' ]]; then
           echo "正在下载async-profiler......"
-          sudo wget --no-check-certificate http://fengfu.io/attach/async-profiler-1.5-linux-x64.tar.gz >> /dev/null 2>&1
+          sudo wget  http://3.106.11.105:8083/tool/download/async-profiler-1.6-linux-x64.tar.gz >> /dev/null 2>&1
           sudo mkdir async-profiler
-          sudo tar -xvf async-profiler-1.5-linux-x64.tar.gz -C async-profiler >> /dev/null 2>&1
-          sudo rm -f async-profiler-1.5-linux-x64.tar.gz >> /dev/null 2>&1
+          sudo tar -xvf async-profiler-1.6-linux-x64.tar.gz -C async-profiler >> /dev/null 2>&1
+          sudo rm -f async-profiler-1.6-linux-x64.tar.gz >> /dev/null 2>&1
         else
           echo "正在下载async-profiler for linux core 2.6.34及以下版本......"
-          sudo wget --no-check-certificate http://fengfu.io/attach/async-profiler-1.5-linux-2.6.34-x64.tar.gz >> /dev/null 2>&1
+          sudo wget  http://3.106.11.105:8083/tool/download/async-profiler-1.5-linux-2.6.34-x64.tar.gz >> /dev/null 2>&1
           sudo mkdir async-profiler
           sudo tar -xvf async-profiler-1.5-linux-2.6.34-x64.tar.gz -C async-profiler >> /dev/null 2>&1
           sudo rm -f async-profiler-1.5-linux-2.6.34-x64.tar.gz >> /dev/null 2>&1
         fi
+        chmod 777 async-profiler -R
+        sudo chown $user:$group -R async-profiler >> /dev/null 2>&1
         #修改属主
         #sudo chown $group.$user -R vjtop >> /dev/null 2>&1
       fi
       cd async-profiler
-      fname="/tmp/hsperfdata_$user/flamegraph_$current_pid.svg"
+      fname="/home/$user/flamegraph_$current_pid.svg"
       echo "正在收集数据,需要等待$duration分钟......"
 
       sudo ./profiler.sh -d $duration_sec -f $fname $current_pid
@@ -246,29 +248,30 @@ elif [ $num -eq '4' ];then
         fi
       fi
 
-      duration_sec=`echo "scale=0; $duration*10"|bc -l`
+      duration_sec=`echo "scale=0; $duration*60"|bc -l`
 
       if [ ! -d "async-profiler" ]; then
         core_version=`get_core_version`
         if [[ $core_version -lt '2634' ]]; then
           echo "正在下载async-profiler......"
-          sudo wget --no-check-certificate http://fengfu.io/attach/async-profiler-1.5-linux-x64.tar.gz >> /dev/null 2>&1
+          sudo wget  http://3.106.11.105:8083/tool/download/async-profiler-1.6-linux-x64.tar.gz >> /dev/null 2>&1
           sudo mkdir async-profiler
-          sudo tar -xvf async-profiler-1.5-linux-x64.tar.gz -C async-profiler >> /dev/null 2>&1
-          sudo rm -f async-profiler-1.5-linux-x64.tar.gz >> /dev/null 2>&1
+          sudo tar -xvf async-profiler-1.6-linux-x64.tar.gz -C async-profiler >> /dev/null 2>&1
+          sudo rm -f async-profiler-1.6-linux-x64.tar.gz >> /dev/null 2>&1
         else
           echo "正在下载async-profiler for linux core 2.6.34及以下版本......"
-          sudo wget --no-check-certificate http://fengfu.io/attach/async-profiler-1.5-linux-2.6.34-x64.tar.gz >> /dev/null 2>&1
+          sudo wget  http://3.106.11.105:8083/tool/download/async-profiler-1.5-linux-2.6.34-x64.tar.gz >> /dev/null 2>&1
           sudo mkdir async-profiler
           sudo tar -xvf async-profiler-1.5-linux-2.6.34-x64.tar.gz -C async-profiler >> /dev/null 2>&1
           sudo rm -f async-profiler-1.5-linux-2.6.34-x64.tar.gz >> /dev/null 2>&1
         fi
-
+        sudo chown $user:$group -R async-profiler >> /dev/null 2>&1
+        chmod 777 async-profiler -R
         #修改属主
         #sudo chown $group.$user -R vjtop >> /dev/null 2>&1
       fi
       cd async-profiler
-      fname="/tmp/hsperfdata_$user/jfr_$current_pid.jfr"
+      fname="/home/$user/jfr_$current_pid.jfr"
       echo "正在收集数据,需要等待$duration分钟......"
 
       sudo ./profiler.sh -d $duration_sec -o jfr -f $fname $current_pid

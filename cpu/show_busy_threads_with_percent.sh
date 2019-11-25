@@ -222,7 +222,7 @@ if [ -n "$append_file" ]; then
         if [ -e "$append_file_dir" ]; then
             [ -d "$append_file_dir" ] || die "directory $append_file_dir(specified by option -a, for storing run output files) exists but is not a directory!"
             [ -w "$append_file_dir" ] || die "directory $append_file_dir(specified by option -a, for storing run output files) exists but is not writable!"
-        else
+        elsecd
             mkdir -p "$append_file_dir" || die "fail to create directory $append_file_dir(specified by option -a, for storing run output files)!"
         fi
     fi
